@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+
+# lokalna konfiguracja Claude Code, zawiera sciezki z dysku
+.claude/settings.local.json
