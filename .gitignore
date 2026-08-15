@@ -1,6 +1,9 @@
 node_modules/
 dist/
 .wrangler/
+
+# model i silnik ONNX (~54 MB) - sciaga je scripts/pobierz-model.mjs przed buildem
+public/imgly/
 *.local
 .DS_Store
 

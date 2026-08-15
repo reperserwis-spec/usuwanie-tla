@@ -90,6 +90,27 @@ main {
   transition: width 0.2s;
 }
 
+/* Dopóki nie spłynie pierwszy kawałek pobierania, nie znamy postępu —
+   ruchomy pasek mówi "działa", a nie "zawiesiło się". */
+.bar.indeterminate > div {
+  width: 35%;
+  transition: none;
+  animation: sunie 1.4s ease-in-out infinite;
+}
+
+@keyframes sunie {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(286%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar.indeterminate > div {
+    animation: none;
+    width: 100%;
+    opacity: 0.35;
+  }
+}
+
 #status-text {
   margin: 0.6rem 0 0;
   color: var(--muted);
@@ -173,6 +194,28 @@ figcaption {
   margin-top: 1.5rem;
   text-align: center;
   color: var(--danger);
+}
+
+.diag {
+  max-width: 620px;
+  margin: 0.75rem auto 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.diag summary {
+  cursor: pointer;
+  text-align: center;
+}
+
+.diag pre {
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 footer {

@@ -1,0 +1,5 @@
+# Cloudflare Pages domyslnie daje statykom "max-age=0, must-revalidate".
+# Kawalki modelu maja w nazwie skrot swojej tresci, wiec sa niezmienne -
+# bez tego telefon kasuje je z cache'u i sciaga 53 MB od nowa przy kazdej wizycie.
+/imgly/chunks/*
+  Cache-Control: public, max-age=31536000, immutable

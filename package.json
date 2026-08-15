@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "model": "node scripts/pobierz-model.mjs",
+    "predev": "npm run model",
     "dev": "vite",
+    "prebuild": "npm run model",
     "build": "vite build",
+    "prepreview": "npm run model",
     "preview": "vite preview"
   },
   "type": "module",

@@ -20,7 +20,7 @@
       </div>
 
       <div id="status" class="status" hidden>
-        <div class="bar"><div id="bar-fill"></div></div>
+        <div id="bar" class="bar"><div id="bar-fill"></div></div>
         <p id="status-text">Przygotowuję…</p>
       </div>
 
@@ -41,6 +41,12 @@
       </div>
 
       <p id="error" class="error" hidden></p>
+
+      <!-- Na telefonie nie ma konsoli — te dane wystarczy zrzucić zrzutem ekranu. -->
+      <details id="diag" class="diag" hidden>
+        <summary>Szczegóły techniczne</summary>
+        <pre id="diag-text"></pre>
+      </details>
     </main>
 
     <!--
