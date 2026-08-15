@@ -7,7 +7,10 @@ klik, albo `Ctrl+V`) i dostaje PNG z przezroczystym tłem.
 przez WebAssembly, zdjęcia nigdy nie opuszczają urządzenia. Nie ma backendu i nie ma go
 być — to element obietnicy złożonej użytkownikowi w stopce strony.
 
-Uwaga: folder na dysku nazywa się `Kurs CC`, ale projekt (i repo) to `usuwanie-tla`.
+Folder na dysku: `C:\Users\kacpe\OneDrive\Dokumenty\Kodowanie\usuwanie-tla`.
+Każdy projekt ma własny katalog w `Kodowanie\`, nazwany małymi literami z myślnikami —
+tak samo jak repo na GitHubie. Do 15.08.2026 ten folder nazywał się `Kurs CC`; jeśli
+gdzieś w notatkach albo w konfiguracji wypłynie ta stara nazwa, to jest ślad po zmianie.
 
 ## Stos
 
