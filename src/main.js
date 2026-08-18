@@ -13,6 +13,7 @@ const actionsEl = document.querySelector("#actions");
 const downloadEl = document.querySelector("#download");
 const resetEl = document.querySelector("#reset");
 const errorEl = document.querySelector("#error");
+const errorTextEl = document.querySelector("#error-text");
 const diagEl = document.querySelector("#diag");
 const diagTextEl = document.querySelector("#diag-text");
 
@@ -65,12 +66,14 @@ let phaseRatio = null; // null = pasek nieokreślony, jeszcze nie znamy postępu
 function render() {
   const s = Math.round((performance.now() - startedAt) / 1000);
   statusEl.hidden = false;
-  statusTextEl.textContent = `${phaseLabel}… ${s} s`;
+  statusTextEl.textContent = `${phaseLabel} · ${s} s`;
   barEl.classList.toggle("indeterminate", phaseRatio === null);
-  if (phaseRatio !== null) {
-    const pct = Math.round(Math.min(Math.max(phaseRatio, 0), 1) * 100);
-    barFillEl.style.width = `${pct}%`;
-  }
+  // Szerokość musi wrócić do pustej wartości, inaczej styl inline z poprzedniego
+  // zdjęcia przebija regułę paska nieokreślonego.
+  barFillEl.style.width =
+    phaseRatio === null
+      ? ""
+      : `${Math.round(Math.min(Math.max(phaseRatio, 0), 1) * 100)}%`;
 }
 
 function setPhase(label, ratio = null) {
@@ -87,7 +90,7 @@ function stopTicker() {
 }
 
 function showError(message) {
-  errorEl.textContent = message;
+  errorTextEl.textContent = message;
   errorEl.hidden = false;
   diagTextEl.textContent = diagnostics();
   diagEl.hidden = false;
@@ -109,6 +112,7 @@ function reset() {
   stopTicker();
   releaseUrls();
   lastStage = "";
+  resultsEl.classList.remove("tnie");
   resultsEl.hidden = true;
   actionsEl.hidden = true;
   statusEl.hidden = true;
@@ -158,13 +162,15 @@ async function process(file) {
   // przepuszczamy i niech zdecyduje dekoder.
   if (!file || (file.type && !file.type.startsWith("image/"))) {
     lastStage = `odrzucony plik typu "${file?.type || "?"}"`;
-    showError("To nie wygląda na plik graficzny.");
+    showError("To nie wygląda na plik graficzny. Wybierz JPG, PNG albo WEBP.");
     return;
   }
 
   busy = true;
   reset();
   resultsEl.hidden = false;
+  // Wokół pustej ramki maszeruje linia cięcia dopóki trwa przetwarzanie.
+  resultsEl.classList.add("tnie");
   afterEl.removeAttribute("src");
   lastStage = "przygotowanie";
   setPhase("Przygotowuję");
@@ -205,10 +211,12 @@ async function process(file) {
     statusEl.hidden = true;
   } finally {
     busy = false;
+    resultsEl.classList.remove("tnie");
   }
 }
 
-dropEl.addEventListener("click", () => fileEl.click());
+// Klikanie i klawiatura idą przez `label` i ukryty wizualnie `input` —
+// bez własnego kodu.
 fileEl.addEventListener("change", () => process(fileEl.files?.[0]));
 
 ["dragenter", "dragover"].forEach((type) =>

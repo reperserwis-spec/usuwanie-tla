@@ -1,11 +1,36 @@
+/* Fonty jadą z naszego hostingu (@fontsource), nie z Google Fonts —
+   strona obiecuje, że nic nie wychodzi na zewnątrz, i to dotyczy też fontów. */
+/* Tylko subsety latin i latin-ext — wejścia zbiorcze pakietów ciągną jeszcze
+   cyrylicę, grekę i wietnamski, których polski interfejs nigdy nie użyje,
+   a które i tak lądują w dist/ i w deployu. */
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource/ibm-plex-sans/latin-400.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-400.css";
+@import "@fontsource/ibm-plex-sans/latin-600.css";
+@import "@fontsource/ibm-plex-sans/latin-ext-600.css";
+@import "@fontsource/ibm-plex-mono/latin-400.css";
+@import "@fontsource/ibm-plex-mono/latin-ext-400.css";
+
 :root {
-  --bg: #0f1115;
-  --panel: #171a21;
-  --line: #2a2f3a;
-  --text: #e8eaef;
-  --muted: #9aa3b2;
-  --accent: #6ea8fe;
-  --danger: #ff8080;
+  /* Mata do cięcia: średni ton, nie czerń — na niej leży wszystko inne. */
+  --mata: #2c574a;
+  --studnia: #14312a;
+  --studnia-dno: #0f251f;
+  --siatka: rgba(233, 244, 238, 0.07);
+  --siatka-mocna: rgba(233, 244, 238, 0.13);
+  --kreda: #f0f6f2;
+  --szalwia: #bbd3c7;
+  --szalwia-kanaly: 187 211 199; /* --szalwia rozłożona na kanały, do przezroczystości */
+  --ostrze: #ff6b3d;
+  --ostrze-jasny: #ff8459;
+  --alarm: #ff8f7a;
+  --cien-studni: inset 0 2px 22px rgba(0, 0, 0, 0.45);
+
+  --szyld: "Archivo Variable", "Arial Narrow", system-ui, sans-serif;
+  --tresc: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --odczyt: "IBM Plex Mono", ui-monospace, "Consolas", monospace;
+
+  --miara: 64rem;
 }
 
 * {
@@ -19,219 +44,461 @@
 
 body {
   margin: 0;
-  padding: 2.5rem 1.25rem 4rem;
-  background: var(--bg);
-  color: var(--text);
-  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: var(--mata);
+  /* Siatka maty: co 28 px cienka, co 140 px mocniejsza. */
+  background-image:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.05), transparent 60%),
+    repeating-linear-gradient(to right, var(--siatka-mocna) 0 1px, transparent 1px 140px),
+    repeating-linear-gradient(to bottom, var(--siatka-mocna) 0 1px, transparent 1px 140px),
+    repeating-linear-gradient(to right, var(--siatka) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(to bottom, var(--siatka) 0 1px, transparent 1px 28px);
+  color: var(--kreda);
+  font: 400 1rem/1.6 var(--tresc);
+  -webkit-font-smoothing: antialiased;
 }
 
-header {
-  max-width: 900px;
-  margin: 0 auto 2rem;
-  text-align: center;
-}
-
-h1 {
-  margin: 0 0 0.35rem;
-  font-size: 1.9rem;
-}
-
-.sub {
-  margin: 0;
-  color: var(--muted);
-}
-
-main {
-  max-width: 900px;
+.mata {
+  max-width: var(--miara);
   margin: 0 auto;
+  padding: clamp(2rem, 6vw, 5rem) clamp(1.15rem, 4vw, 3rem) 4rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ostrze);
+  outline-offset: 3px;
+}
+
+/* ── Nagłówek ─────────────────────────────────────────────── */
+
+.nadtytul {
+  margin: 0 0 1.1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--siatka-mocna);
+  color: var(--szalwia);
+  font: 400 0.75rem/1 var(--odczyt);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.tytul {
+  margin: 0;
+  font-family: var(--szyld);
+  font-size: clamp(3rem, 13vw, 8.5rem);
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 0.82;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.tytul span {
+  display: block;
+}
+
+/* Szachownica przezroczystości — motyw przewodni strony, rysowany raz.
+   Konsument ustawia kolor kratki (--kratka) i bok pola (--bok, --pol-boku). */
+.szachownica-wzor {
+  background-image:
+    linear-gradient(45deg, var(--kratka) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--kratka) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--kratka) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--kratka) 75%);
+  background-size: var(--bok) var(--bok);
+  background-position:
+    0 0,
+    0 var(--pol-boku),
+    var(--pol-boku) calc(-1 * var(--pol-boku)),
+    calc(-1 * var(--pol-boku)) 0;
+}
+
+/* Sygnatura strony: w słowie „tła" tło zostało usunięte — zamiast liter
+   widać szachownicę przezroczystości. */
+.tytul-tla {
+  --kratka: #9fb3aa;
+  --bok: 0.14em;
+  --pol-boku: 0.07em;
+  background-color: #f4f8f6;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lid {
+  max-width: 34rem;
+  margin: 1.5rem 0 0;
+  color: var(--szalwia);
+  font-size: 1.05rem;
+}
+
+/* ── Linia cięcia ─────────────────────────────────────────── */
+
+/* Przerywana kreska rysowana czterema gradientami zamiast border: dashed —
+   tylko tak da się ją wprawić w ruch (maszerujące mrówki z zaznaczenia). */
+.ciecie {
+  --kreska: rgb(var(--szalwia-kanaly) / 0.45);
+  position: relative;
+}
+
+/* Ramka wyniku dostaje tę samą kreskę, ale dopiero na czas liczenia —
+   dlatego drugi selektor zamiast klasy `ciecie` w HTML-u. */
+.ciecie::before,
+.tnie .szachownica::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, var(--kreska) 0 9px, transparent 9px 18px),
+    repeating-linear-gradient(90deg, var(--kreska) 0 9px, transparent 9px 18px),
+    repeating-linear-gradient(0deg, var(--kreska) 0 9px, transparent 9px 18px),
+    repeating-linear-gradient(0deg, var(--kreska) 0 9px, transparent 9px 18px);
+  background-size: 100% 2px, 100% 2px, 2px 100%, 2px 100%;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  background-repeat: no-repeat;
+}
+
+@keyframes mrowki {
+  to {
+    background-position: 18px 0, -18px 100%, 0 -18px, 100% 18px;
+  }
+}
+
+/* ── Pole zrzutu ──────────────────────────────────────────── */
+
+/* Studnia wycięta w macie — wspólna powierzchnia pola zrzutu i ramek wyniku. */
+.drop,
+.ramka {
+  background: var(--studnia);
+  box-shadow: var(--cien-studni);
 }
 
 .drop {
-  border: 2px dashed var(--line);
-  border-radius: 14px;
-  padding: 3rem 1.5rem;
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  padding: clamp(2.5rem, 7vw, 4.5rem) 1.5rem;
+  border: 0;
+  color: inherit;
+  font: inherit;
   text-align: center;
   cursor: pointer;
-  background: var(--panel);
-  transition: border-color 0.15s, background 0.15s;
+  transition: background 0.15s;
+}
+
+/* Input zostaje w drzewie i w kolejności tabulacji — to on, a nie label,
+   przyjmuje fokus i obsługuje Enter/Spację. */
+.plik {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .drop:hover,
+.drop:focus-within,
 .drop.over {
-  border-color: var(--accent);
-  background: #1b2029;
+  --kreska: var(--ostrze);
+  background: var(--studnia-dno);
 }
 
-.drop p {
-  margin: 0.25rem 0;
+.znacznik {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 0.9rem;
+  fill: none;
+  stroke: var(--szalwia);
+  stroke-width: 1.5;
+  /* Sam rozmiar zmienia się skokowo: animowanie width/height przeliczałoby
+     układ w klatce, w której kończy się przetwarzanie. */
+  transition: stroke 0.15s;
 }
 
-.hint {
-  color: var(--muted);
-  font-size: 0.9rem;
+.drop:hover .znacznik,
+.drop:focus-within .znacznik,
+.drop.over .znacznik {
+  stroke: var(--ostrze);
 }
 
-.status {
-  margin-top: 1.5rem;
+.drop-glowny {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.drop-hint {
+  margin: 0;
+  color: var(--szalwia);
+  font: 400 0.8rem/1.5 var(--odczyt);
   text-align: center;
 }
 
+/* Po pierwszym zdjęciu pole zrzutu przestaje być bohaterem strony. */
+.drop:has(~ #results:not([hidden])) {
+  padding: 1.6rem 1.5rem;
+}
+
+.drop:has(~ #results:not([hidden])) .znacznik {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 0.5rem;
+}
+
+.drop:has(~ #results:not([hidden])) .drop-glowny {
+  font-size: 1rem;
+}
+
+/* ── Postęp ───────────────────────────────────────────────── */
+
+.status {
+  margin-top: 2rem;
+}
+
+.odczyt {
+  margin: 0 0 0.7rem;
+  color: var(--kreda);
+  font: 400 0.8rem/1.4 var(--odczyt);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Podziałka: kreski co 10% postępu, żeby pasek dało się odczytać jak linijkę. */
 .bar {
-  height: 6px;
-  border-radius: 999px;
-  background: var(--line);
-  overflow: hidden;
+  position: relative;
+  height: 10px;
+  border-bottom: 2px solid var(--siatka-mocna);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--siatka-mocna) 0 1px,
+    transparent 1px 10%
+  );
+  background-position: bottom;
+  background-size: 100% 5px;
+  background-repeat: no-repeat;
 }
 
 .bar > div {
-  height: 100%;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
   width: 0;
-  background: var(--accent);
+  background: var(--ostrze);
   transition: width 0.2s;
 }
 
 /* Dopóki nie spłynie pierwszy kawałek pobierania, nie znamy postępu —
-   ruchomy pasek mówi "działa", a nie "zawiesiło się". */
+   ruchoma kreska mówi „działa", a nie „zawiesiło się". */
 .bar.indeterminate > div {
-  width: 35%;
+  width: 28%;
   transition: none;
-  animation: sunie 1.4s ease-in-out infinite;
+  animation: sunie 1.5s ease-in-out infinite;
 }
 
 @keyframes sunie {
   0% { transform: translateX(-100%); }
-  100% { transform: translateX(286%); }
+  100% { transform: translateX(357%); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .bar.indeterminate > div {
-    animation: none;
-    width: 100%;
-    opacity: 0.35;
-  }
-}
-
-#status-text {
-  margin: 0.6rem 0 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
+/* ── Wynik ────────────────────────────────────────────────── */
 
 .results {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.25rem;
-  margin-top: 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin-top: 2.5rem;
 }
 
 figure {
   margin: 0;
 }
 
-figcaption {
-  margin-bottom: 0.5rem;
-  color: var(--muted);
-  font-size: 0.85rem;
+figcaption,
+.tnie .szachownica::after {
+  color: var(--szalwia);
+  font: 400 0.75rem/1 var(--odczyt);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
-.frame {
+figcaption {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+figcaption::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--siatka-mocna);
+}
+
+.ramka {
+  position: relative;
   display: grid;
   place-items: center;
-  min-height: 220px;
-  padding: 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--panel);
+  min-height: 240px;
+  padding: 0.9rem;
 }
 
-/* Szachownica pokazuje, że tło jest naprawdę przezroczyste. */
-.checker {
+/* Szachownica pokazuje, że tło jest naprawdę przezroczyste. Leży pod samym
+   obrazkiem, nie pod całą ramką — dzięki temu widać, gdzie kończy się PNG. */
+.szachownica img {
+  /* Neutralna szarość, celowo poza paletą: szachownica ma znaczyć
+     „przezroczyste", a nie zdobić. */
+  --kratka: #ccc;
+  --bok: 20px;
+  --pol-boku: 10px;
   background-color: #fff;
-  background-image:
-    linear-gradient(45deg, #ccc 25%, transparent 25%),
-    linear-gradient(-45deg, #ccc 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #ccc 75%),
-    linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
 }
 
-.frame img {
+.ramka img {
+  display: block;
   max-width: 100%;
   max-height: 420px;
-  display: block;
 }
+
+/* Zanim spłynie wynik, ramka jest pusta — bez tego przeglądarka rysuje
+   w niej ikonę zepsutego obrazka. */
+.ramka img:not([src]) {
+  display: none;
+}
+
+/* Klasę `tnie` zdejmuje i nakłada main.js — to jedyny moment, w którym wynik
+   naprawdę się liczy. Stan pola `#status` nie wystarczy: pasek jest widoczny
+   także podczas pobierania modelu. */
+.tnie .szachownica {
+  --kreska: var(--ostrze);
+}
+
+/* Krok co 3 px zamiast płynnego przesuwu: linia cięcia w programach
+   graficznych i tak skacze, a przemalowań jest siedem razy mniej — telefon
+   liczy wtedy model i każda klatka idzie z tego samego wątku. */
+.tnie .szachownica::before {
+  animation: mrowki 0.7s steps(6) infinite;
+}
+
+.tnie .szachownica::after {
+  content: "wycinam";
+  color: var(--ostrze);
+}
+
+/* ── Działania ────────────────────────────────────────────── */
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
-  justify-content: center;
-  margin-top: 1.75rem;
+  margin-top: 2rem;
 }
 
 .btn {
-  display: inline-block;
-  padding: 0.7rem 1.4rem;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: var(--accent);
-  color: #0f1115;
-  font: inherit;
-  font-weight: 600;
+  padding: 0.8rem 1.6rem;
+  border: 2px solid var(--ostrze);
+  border-radius: 2px;
+  background: var(--ostrze);
+  color: var(--studnia);
+  font: 600 0.95rem/1.4 var(--tresc);
   text-decoration: none;
   cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn:hover {
+  background: var(--ostrze-jasny);
+  border-color: var(--ostrze-jasny);
 }
 
 .btn.ghost {
+  border-color: rgb(var(--szalwia-kanaly) / 0.4);
   background: transparent;
-  border-color: var(--line);
-  color: var(--text);
+  color: var(--kreda);
 }
 
+.btn.ghost:hover {
+  border-color: var(--szalwia);
+  background: var(--studnia);
+}
+
+/* ── Błąd i diagnostyka ───────────────────────────────────── */
+
 .error {
-  margin-top: 1.5rem;
-  text-align: center;
-  color: var(--danger);
+  margin-top: 2rem;
+  padding: 1.1rem 1.3rem;
+  border-left: 2px solid var(--alarm);
+  background: var(--studnia);
+}
+
+.error > p {
+  margin: 0;
+  color: var(--alarm);
 }
 
 .diag {
-  max-width: 620px;
-  margin: 0.75rem auto 0;
-  color: var(--muted);
-  font-size: 0.8rem;
+  margin-top: 0.9rem;
+  color: var(--szalwia);
+  font: 400 0.75rem/1.5 var(--odczyt);
 }
 
 .diag summary {
   cursor: pointer;
-  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .diag pre {
-  margin: 0.5rem 0 0;
-  padding: 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--panel);
+  margin: 0.7rem 0 0;
+  padding: 0.8rem;
+  background: var(--studnia-dno);
+  font: inherit;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
+/* ── Stopka ───────────────────────────────────────────────── */
+
 footer {
-  max-width: 900px;
-  margin: 4rem auto 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-align: center;
+  max-width: 46rem;
+  margin-top: clamp(3.5rem, 10vw, 6rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--siatka-mocna);
+  color: var(--szalwia);
+  font: 400 0.75rem/1.7 var(--odczyt);
 }
 
 footer p {
-  margin: 0.4rem 0;
+  margin: 0 0 0.5rem;
+}
+
+footer strong {
+  color: var(--kreda);
+  font-weight: 400;
 }
 
 footer a {
-  color: var(--muted);
+  color: var(--szalwia);
+  text-underline-offset: 3px;
+}
+
+footer a:hover {
+  color: var(--kreda);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar.indeterminate > div {
+    animation: none;
+    width: 100%;
+    opacity: 0.4;
+  }
+
+  .tnie .szachownica::before {
+    animation: none;
+  }
 }

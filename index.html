@@ -3,74 +3,92 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2C574A" />
     <title>Usuwanie tła</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <header>
-      <h1>Usuwanie tła</h1>
-      <p class="sub">Wrzuć zdjęcie — wszystko dzieje się lokalnie w przeglądarce.</p>
-    </header>
+    <div class="mata">
+      <header>
+        <p class="nadtytul">PNG z przezroczystym tłem</p>
+        <h1 class="tytul">
+          <span>Usuwanie</span>
+          <span class="tytul-tla szachownica-wzor">tła</span>
+        </h1>
+        <p class="lid">
+          Wrzuć zdjęcie, odbierz wycięty obiekt. Wszystko liczy się na Twoim
+          urządzeniu — plik nigdzie nie jest wysyłany.
+        </p>
+      </header>
 
-    <main>
-      <div id="drop" class="drop">
-        <input type="file" id="file" accept="image/*" hidden />
-        <p><strong>Przeciągnij zdjęcie tutaj</strong></p>
-        <p class="hint">albo kliknij, żeby wybrać plik &middot; możesz też wkleić przez Ctrl+V</p>
-      </div>
+      <main>
+        <label id="drop" class="drop ciecie">
+          <input type="file" id="file" class="plik" accept="image/*" />
+          <svg class="znacznik" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="13" />
+            <path d="M24 2v19M24 27v19M2 24h19M27 24h19" />
+          </svg>
+          <span class="drop-glowny">Przeciągnij zdjęcie tutaj</span>
+          <span class="drop-hint">albo kliknij, żeby wybrać plik &middot; Ctrl+V wkleja ze schowka</span>
+        </label>
 
-      <div id="status" class="status" hidden>
-        <div id="bar" class="bar"><div id="bar-fill"></div></div>
-        <p id="status-text">Przygotowuję…</p>
-      </div>
+        <div id="status" class="status" role="status" hidden>
+          <p id="status-text" class="odczyt">Przygotowuję</p>
+          <div id="bar" class="bar"><div id="bar-fill"></div></div>
+        </div>
 
-      <section id="results" class="results" hidden>
-        <figure>
-          <figcaption>Oryginał</figcaption>
-          <div class="frame"><img id="before" alt="Oryginalne zdjęcie" /></div>
-        </figure>
-        <figure>
-          <figcaption>Bez tła</figcaption>
-          <div class="frame checker"><img id="after" alt="Zdjęcie bez tła" /></div>
-        </figure>
-      </section>
+        <section id="results" class="results" hidden>
+          <figure>
+            <figcaption>Oryginał</figcaption>
+            <div class="ramka"><img id="before" alt="Oryginalne zdjęcie" /></div>
+          </figure>
+          <figure>
+            <figcaption>Bez tła</figcaption>
+            <div class="ramka szachownica">
+              <img id="after" class="szachownica-wzor" alt="Zdjęcie bez tła" />
+            </div>
+          </figure>
+        </section>
 
-      <div id="actions" class="actions" hidden>
-        <a id="download" class="btn" download="bez-tla.png">Pobierz PNG</a>
-        <button id="reset" class="btn ghost" type="button">Nowe zdjęcie</button>
-      </div>
+        <div id="actions" class="actions" hidden>
+          <a id="download" class="btn" download="bez-tla.png">Pobierz PNG</a>
+          <button id="reset" class="btn ghost" type="button">Nowe zdjęcie</button>
+        </div>
 
-      <p id="error" class="error" hidden></p>
+        <div id="error" class="error" hidden>
+          <p id="error-text"></p>
 
-      <!-- Na telefonie nie ma konsoli — te dane wystarczy zrzucić zrzutem ekranu. -->
-      <details id="diag" class="diag" hidden>
-        <summary>Szczegóły techniczne</summary>
-        <pre id="diag-text"></pre>
-      </details>
-    </main>
+          <!-- Na telefonie nie ma konsoli — te dane wystarczy zrzucić zrzutem ekranu. -->
+          <details id="diag" class="diag" hidden>
+            <summary>Szczegóły techniczne</summary>
+            <pre id="diag-text"></pre>
+          </details>
+        </div>
+      </main>
 
-    <!--
-      Stopka spełnia wymogi AGPL-3.0: "Appropriate Legal Notices" (§5d)
-      oraz ofertę kodu źródłowego dla użytkowników sieciowych (§13).
-      Nie usuwać bez zmiany licencji całej aplikacji.
-    -->
-    <footer>
-      <p>
-        <strong>Usuwanie tła</strong> &mdash; zdjęcia przetwarzane są wyłącznie w Twojej
-        przeglądarce i nie są nigdzie wysyłane.
-      </p>
-      <p>
-        Program udostępniany na licencji
-        <a href="https://www.gnu.org/licenses/agpl-3.0.html" rel="noopener" target="_blank">AGPL-3.0</a>
-        &mdash; <a id="source-link" href="https://github.com/reperserwis-spec/usuwanie-tla" rel="noopener" target="_blank">kod źródłowy</a>.
-        Udostępniany bez jakiejkolwiek gwarancji, w zakresie dozwolonym przez prawo.
-      </p>
-      <p>
-        Wykorzystuje bibliotekę
-        <a href="https://github.com/imgly/background-removal-js" rel="noopener" target="_blank">@imgly/background-removal</a>
-        (AGPL-3.0).
-      </p>
-    </footer>
+      <!--
+        Stopka spełnia wymogi AGPL-3.0: "Appropriate Legal Notices" (§5d)
+        oraz ofertę kodu źródłowego dla użytkowników sieciowych (§13).
+        Nie usuwać bez zmiany licencji całej aplikacji.
+      -->
+      <footer>
+        <p>
+          <strong>Usuwanie tła</strong> &mdash; zdjęcia przetwarzane są wyłącznie w Twojej
+          przeglądarce i nie są nigdzie wysyłane.
+        </p>
+        <p>
+          Program udostępniany na licencji
+          <a href="https://www.gnu.org/licenses/agpl-3.0.html" rel="noopener" target="_blank">AGPL-3.0</a>
+          &mdash; <a id="source-link" href="https://github.com/reperserwis-spec/usuwanie-tla" rel="noopener" target="_blank">kod źródłowy</a>.
+          Udostępniany bez jakiejkolwiek gwarancji, w zakresie dozwolonym przez prawo.
+        </p>
+        <p>
+          Wykorzystuje bibliotekę
+          <a href="https://github.com/imgly/background-removal-js" rel="noopener" target="_blank">@imgly/background-removal</a>
+          (AGPL-3.0).
+        </p>
+      </footer>
+    </div>
 
     <script type="module" src="/src/main.js"></script>
   </body>

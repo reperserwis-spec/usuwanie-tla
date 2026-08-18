@@ -59,6 +59,41 @@ Usunięcie jej albo zamknięcie repo złamałoby licencję. Gdyby kiedyś trzeba
   w `releaseUrls()`. Każdy nowy `createObjectURL` przepuszczaj przez `trackUrl()`.
 - Flaga `busy` blokuje równoległe przetwarzanie — nie obchodzić jej.
 
+## Język wizualny (od 18.08.2026)
+
+Punkt wyjścia: **mata do cięcia na stole retuszera**. Stąd zielony półton tła
+(`--mata: #2c574a`) z nadrukowaną siatką, ciemniejsze „studnie" na pole zrzutu
+i ramki wyniku, oraz jeden akcent — pomarańcz trzonka skalpela (`--ostrze`).
+
+- **Pomarańcz tylko jako plama i kreska.** Na macie ma kontrast 2,9:1, więc jako
+  tekst wolno go użyć wyłącznie w ciemnej studni (tam 5:1).
+- **Dwie sygnatury, obie z tego samego świata.** W nagłówku słowo „TŁA" jest
+  wypełnione szachownicą przezroczystości (`background-clip: text`) — tło zostało
+  z niego usunięte. W trakcie liczenia wokół pustej ramki wyniku maszeruje linia
+  cięcia (klasa `.ciecie`, keyframes `mrowki`) — to zaznaczenie z programu
+  graficznego, a nie kolejny nijaki spinner.
+- Linia cięcia jest rysowana **czterema gradientami tła**, nie `border: dashed` —
+  tylko tak da się ją animować. Maszeruje krokowo (`steps(6)`), bo płynny przesuw
+  `background-position` przemalowuje całą ramkę 60 razy na sekundę dokładnie
+  wtedy, gdy telefon liczy model.
+- **Że trwa cięcie, wie `main.js`** — nakłada na `#results` klasę `.tnie` na czas
+  `removeBackground`. Nie wyprowadzaj tego z widoczności `#status`: pasek jest
+  widoczny także podczas pobierania modelu.
+- Szachownicę przezroczystości rysuje jedna klasa `.szachownica-wzor`,
+  parametryzowana przez `--kratka`, `--bok` i `--pol-boku`.
+- Pasek postępu ma podziałkę co 10%, żeby czytało się go jak linijkę.
+- Fonty (Archivo Variable na szyld, IBM Plex Sans/Mono na treść i odczyty) idą
+  z `@fontsource`, czyli **z naszego hostingu**. Google Fonts odpada: strona
+  obiecuje, że nic nie wychodzi na zewnątrz, i to dotyczy też fontów.
+  Importujemy wejścia **per subset** (`latin-400.css`, `latin-ext-400.css`…);
+  wejścia zbiorcze pakietów wrzucają do `dist/` jeszcze cyrylicę, grekę
+  i wietnamski, których nikt nigdy nie pobierze.
+- Pole zrzutu to `label` z fokusowalnym `input`em (klasa `.plik`), a nie `div`
+  z `role="button"` — Enter, spacja i nazwa dla czytnika ekranu są wtedy
+  darmowe. Stan fokusu łapie `:focus-within`.
+- Kompaktowanie pola zrzutu po pierwszym zdjęciu robi `:has(~ #results...)`.
+  W starych Safari `:has` nie zadziała i pole zostanie duże — to akceptowalne.
+
 ## Model — dlaczego hostujemy go u siebie
 
 Domyślny model biblioteki to `isnet_fp16` (84 MB), do tego 11 MB silnika ONNX.
