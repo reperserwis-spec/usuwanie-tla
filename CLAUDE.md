@@ -12,36 +12,6 @@ Każdy projekt ma własny katalog w `Kodowanie\`, nazwany małymi literami z my�
 tak samo jak repo na GitHubie. Do 15.08.2026 ten folder nazywał się `Kurs CC`; jeśli
 gdzieś w notatkach albo w konfiguracji wypłynie ta stara nazwa, to jest ślad po zmianie.
 
-## Stos
-
-- Vite 8 + waniliowy JS, bez frameworka i bez TypeScriptu
-- [`@imgly/background-removal`](https://github.com/imgly/background-removal-js) — cała robota AI
-- Node z `.nvmrc` (24)
-- Repo: `origin` → https://github.com/reperserwis-spec/usuwanie-tla
-
-## Komendy
-
-```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build    # → dist/
-npm run preview  # podgląd builda
-npm run model    # ręczne ściągnięcie modelu do public/imgly/
-```
-
-`predev`/`prebuild`/`prepreview` odpalają `npm run model` automatycznie.
-
-## Układ plików
-
-| Plik | Zawartość |
-|---|---|
-| `index.html` | cała struktura strony, w tym stopka licencyjna |
-| `src/main.js` | logika: wczytanie pliku, pasek postępu, wywołanie `removeBackground`, pobieranie |
-| `src/style.css` | style |
-| `scripts/pobierz-model.mjs` | ściąga model + silnik ONNX do `public/imgly/` przed buildem |
-
-`dist/`, `node_modules/`, `public/imgly/` i `.claude/settings.local.json` są w `.gitignore`.
-
 ## Licencja — nie ruszać stopki
 
 Projekt jest na **AGPL-3.0**, bo taką licencję ma `@imgly/background-removal`.
@@ -168,9 +138,11 @@ też idą z naszego hostingu. Pierwsze wejście użytkownika to ok. 53 MB.
 `dist/` waży ~79 MB, bo dochodzi jeszcze nieużywany `ort-wasm-simd-threaded.jsep-*.wasm`
 (~24 MB) — patrz uwaga wyżej.
 
-Upload trwa **kilka minut** i **przekracza limit pojedynczej komendy** — puszczaj
-deploy w tle, inaczej dostaniesz timeout i pusty wynik (tak umarła pierwsza próba:
-exit 58, brak deploymentu, `pages.dev` zwracał 522).
+**Pierwsze** wgranie modelu trwa kilka minut i przekracza limit pojedynczej
+komendy — wtedy puszczaj deploy w tle, inaczej dostaniesz timeout i pusty wynik
+(tak umarła pierwsza próba: exit 58, brak deploymentu, `pages.dev` zwracał 522).
+Kolejne wdrożenia idą w sekundy: kawałki modelu mają w nazwie skrót treści, więc
+Cloudflare rozpoznaje je jako już wgrane i przyjmuje tylko nowe assety.
 
 ## Stan prac (15.08.2026)
 
